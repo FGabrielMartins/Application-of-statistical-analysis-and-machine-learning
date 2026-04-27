@@ -116,7 +116,6 @@ def info_dataset():
         "tipos_colunas": df.dtypes.astype(str).to_dict(),
  
         # describe() calcula estatísticas básicas: média, min, max, desvio padrão...
-        # only_numeric=True = só colunas numéricas
         # round(4) = arredonda para 4 casas decimais
         "estatisticas_basicas": df.describe().round(4).to_dict(),
     }

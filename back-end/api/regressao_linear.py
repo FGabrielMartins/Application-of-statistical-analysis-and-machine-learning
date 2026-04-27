@@ -61,3 +61,30 @@ def calcular_correlacao(coluna_alvo: str):
             status_code=400,
             detail = f"Coluna '{coluna_alvo}' não encontrada. Colunas disponíveis: {df.columns.tolist()}"
         )
+    
+    #seleciona apenas colunas númericas
+    df_num = df.select_dtypes(include = [np.number])
+
+    #correlação de cada variável com a coluna alvo
+    x = df_num.drop(columns=[coluna_alvo])
+    y = df_num[coluna_alvo]
+    correlacao_com_alvo = x.corrwith(y).round(6)
+
+    #Classifica a força de cada correlação
+    def classificar(valor):
+        abs_valor = abs(valor)  #abs = valor absouluto
+        if abs_valor >= 0.8:    return "Forte"
+        elif abs_valor >= 0.5:  return "Moderada"
+        else:                   return"Fraca"
+
+    correlacao_classificada = {
+        col: {
+            "Correlação": round(float(correlacao_com_alvo[col], 6)),
+            "Força": classificar(correlacao_com_alvo[col]),
+            "Direcao": "Positiva" if correlacao_com_alvo[col] > 0 else "Negativa"
+        }
+        for col in correlacao_com_alvo.index
+    }
+
+    #Ordenar por valor absoluto decrescente
+    
