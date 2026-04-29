@@ -44,7 +44,7 @@ app.include_router(
 
 app.include_router(
     regressao_linear.router,
-    prefix = "/regressao_linear",
+    prefix = "/regressao-linear",
     tags = ["Regressão linear"]
 )
 
