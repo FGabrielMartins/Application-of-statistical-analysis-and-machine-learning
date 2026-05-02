@@ -1,5 +1,6 @@
 #Agrupa rotas de um módulo
-from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi import APIRouter, UploadFile, File, HTTPException, Depends
+from api.dependencias import verificar_token
 
 #io.StringIO transforma texto em um "arquivo virtual" que o pandar consegue ler
 import io
@@ -32,7 +33,8 @@ def get_dataset() -> pd.DataFrame:
 
 @router.post("/csv")
 async def upload_csv(
-    file: UploadFile = File(...)        # File(...) = parâmetro obrigatório do tipo arquivo
+    file: UploadFile = File(...),        # File(...) = parâmetro obrigatório do tipo arquivo
+    usuario: str = Depends(verificar_token)
 ):
     """
     Recebe um arquivo CSV, valida e salva em memória.

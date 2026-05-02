@@ -7,6 +7,8 @@ from fastapi.middleware.cors import CORSMiddleware
 #importamos as rotas
 from api import upload #rota de upload de CSV
 from api import regressao_linear
+from api import auth
+from api import estatisticas
 
 #INICANDO A APLICAÇÃO
 
@@ -34,6 +36,12 @@ app.add_middleware(
     allow_headers = ["*"],            #Permite todos os cabeçalhos HTTP
 )
 
+app.include_router(
+    auth.router,
+    prefix = "/auth",
+    tags = ["Autenticação"]
+)
+
 #REGISTRANDO OS ROTEADORES
 #include_router() = "liga" cada roteador a aplicação principal
 app.include_router(
@@ -46,6 +54,12 @@ app.include_router(
     regressao_linear.router,
     prefix = "/regressao-linear",
     tags = ["Regressão linear"]
+)
+
+app.include_router(
+    estatisticas.router,
+    prefix = "/estatisticas",
+    tags = ["Estatísticas"]
 )
 
 #ROTA RAIZ - healthCheck

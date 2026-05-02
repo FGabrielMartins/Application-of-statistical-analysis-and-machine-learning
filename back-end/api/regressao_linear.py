@@ -21,6 +21,9 @@ sys.path.insert(0, ...): Insere esse novo diretório na posição 0 (o início) 
 #importa a função get_dataset() do upload, ele retorna o dataframe em memória (ou erro se não ouver dataset)
 from api.upload import get_dataset
 
+from api.dependencias import verificar_token
+from fastapi import Depends
+
 router = APIRouter()
 
 modelo_treinado = None         #Regressão lienar após o .fit()
@@ -43,7 +46,7 @@ class PreverRequest(BaseModel):
 
 #ROTA 1: GET /regressão-linear/correlação
 @router.get("/correlacao")
-def calcular_correlacao(coluna_alvo: str):
+def calcular_correlacao(coluna_alvo: str, usario: str = Depends(verificar_token)):
     """
     Calcula a correlação entre as variáveis do dataset.
     
@@ -122,7 +125,7 @@ def calcular_correlacao(coluna_alvo: str):
 
 #Rota 2: post / Treinar a regressão linear
 @router.post("/treinar")
-def treinar_modelo(req: TreinarRequest):
+def treinar_modelo(req: TreinarRequest, usario: str = Depends(verificar_token)):
     """
     Treina o modelo de regressão linear múltipla.
     
@@ -252,7 +255,7 @@ def treinar_modelo(req: TreinarRequest):
  
 #  ROTA 3: POST
 @router.post("/prever")
-def prever(req: PreverRequest):
+def prever(req: PreverRequest, usario: str = Depends(verificar_token)):
     """
     Usa o modelo já treinado para prever um novo valor.
     Chame /treinar antes de usar esta rota.
